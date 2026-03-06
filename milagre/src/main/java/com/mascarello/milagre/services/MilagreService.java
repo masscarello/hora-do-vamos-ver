@@ -4,37 +4,33 @@ import com.mascarello.milagre.models.MilagreModel;
 import com.mascarello.milagre.repositories.MilagreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@RestController
-@RequestMapping(path = "/milagres")
+@Service
 public class MilagreService {
     @Autowired
     private MilagreRepository milagreRepository;
-    //get
-    //post
-    //delete
-    @GetMapping
-    public List<MilagreModel> milagreModelList(){
-        return milagreRepository.findAll();
+
+    public void excluirMilagre(@PathVariable Long id){
+        milagreRepository.deleteById(id);
+
     }
-    @PostMapping
-    public MilagreModel criar(@RequestBody MilagreModel milagreModel){
+
+    public MilagreModel criarMilagre(@RequestBody MilagreModel milagreModel){
         return milagreRepository.save(milagreModel);
     }
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id){
-        milagreRepository.deleteById(id);
+
+    public List<MilagreModel> buscarTodosMilagres(){
+        return milagreRepository.findAll();
     }
-    @PutMapping("/{id}")
-    public MilagreModel atualizar(@PathVariable Long id, @RequestBody MilagreModel milagreModel){
-        MilagreModel newMilagre = milagreRepository.findById(id).get();
 
-        newMilagre.setNome(milagreModel.getNome());
-
-        return milagreRepository.save(newMilagre);
+    public MilagreModel atualizarMilagre(Long id, MilagreModel milagreModel){
+        MilagreModel novo = milagreRepository.findById(id).get();
+        novo.setNome(milagreModel.getNome());
+        return milagreRepository.save(novo);
     }
 
 }
